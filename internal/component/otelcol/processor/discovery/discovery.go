@@ -1,3 +1,4 @@
+// https://github.com/open-telemetry/opentelemetry-collector-contrib/pull/27588
 // Package discovery provides an otelcol.processor.discovery component.
 package discovery
 

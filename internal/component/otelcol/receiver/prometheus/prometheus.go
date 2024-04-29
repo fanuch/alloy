@@ -114,7 +114,7 @@ func (c *Component) Update(newConfig component.Arguments) error {
 	)
 	settings := otelreceiver.CreateSettings{
 
-		ID: otelcomponent.NewID(otelcomponent.Type(c.opts.ID)),
+		ID: otelcomponent.NewID(otelcomponent.MustNewType(c.opts.ID)),
 
 		TelemetrySettings: otelcomponent.TelemetrySettings{
 			Logger: zapadapter.New(c.opts.Logger),
