@@ -13,12 +13,12 @@ import (
 
 	promsdconsumer "github.com/grafana/alloy/internal/static/traces/promsdprocessor/consumer"
 	"github.com/mitchellh/mapstructure"
+	"github.com/open-telemetry/opentelemetry-collector-contrib/connector/spanmetricsconnector"
 	"github.com/open-telemetry/opentelemetry-collector-contrib/exporter/loadbalancingexporter"
 	"github.com/open-telemetry/opentelemetry-collector-contrib/exporter/prometheusexporter"
 	"github.com/open-telemetry/opentelemetry-collector-contrib/extension/jaegerremotesampling"
 	"github.com/open-telemetry/opentelemetry-collector-contrib/extension/oauth2clientauthextension"
 	"github.com/open-telemetry/opentelemetry-collector-contrib/processor/attributesprocessor"
-	"github.com/open-telemetry/opentelemetry-collector-contrib/processor/spanmetricsprocessor"
 	"github.com/open-telemetry/opentelemetry-collector-contrib/processor/tailsamplingprocessor"
 	"github.com/open-telemetry/opentelemetry-collector-contrib/receiver/jaegerreceiver"
 	"github.com/open-telemetry/opentelemetry-collector-contrib/receiver/kafkareceiver"
@@ -28,6 +28,7 @@ import (
 	prom_config "github.com/prometheus/common/config"
 	"go.opentelemetry.io/collector/component/componenttest"
 	"go.opentelemetry.io/collector/confmap"
+	"go.opentelemetry.io/collector/connector"
 	otelexporter "go.opentelemetry.io/collector/exporter"
 	"go.opentelemetry.io/collector/exporter/otlpexporter"
 	"go.opentelemetry.io/collector/exporter/otlphttpexporter"
@@ -141,8 +142,8 @@ type InstanceConfig struct {
 	OperationType   string        `yaml:"prom_sd_operation_type,omitempty"`
 	PodAssociations []string      `yaml:"prom_sd_pod_associations,omitempty"`
 
-	// SpanMetricsProcessor:
-	// https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/v0.95.0/processor/spanmetricsprocessor
+	// SpanMetricsConnector:
+	// https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/v0.99.0/connector/spanmetricsconnector
 	SpanMetrics *SpanMetricsConfig `yaml:"spanmetrics,omitempty"`
 
 	// AutomaticLogging
@@ -348,10 +349,10 @@ func (c *RemoteWriteConfig) UnmarshalYAML(unmarshal func(interface{}) error) err
 	return nil
 }
 
-// SpanMetricsConfig controls the configuration of spanmetricsprocessor and the related metrics exporter.
+// SpanMetricsConfig controls the configuration of spanmetricsconnector and the related metrics exporter.
 type SpanMetricsConfig struct {
 	LatencyHistogramBuckets []time.Duration                  `yaml:"latency_histogram_buckets,omitempty"`
-	Dimensions              []spanmetricsprocessor.Dimension `yaml:"dimensions,omitempty"`
+	Dimensions              []spanmetricsconnector.Dimension `yaml:"dimensions,omitempty"`
 	// Namespace if set, exports metrics under the provided value.
 	Namespace string `yaml:"namespace,omitempty"`
 	// ConstLabels are values that are applied for every exported metric.
@@ -926,7 +927,6 @@ func tracingFactories() (otelcol.Factories, error) {
 		batchprocessor.NewFactory(),
 		attributesprocessor.NewFactory(),
 		promsdprocessor.NewFactory(),
-		spanmetricsprocessor.NewFactory(),
 		automaticloggingprocessor.NewFactory(),
 		tailsamplingprocessor.NewFactory(),
 		servicegraphprocessor.NewFactory(),
@@ -935,9 +935,14 @@ func tracingFactories() (otelcol.Factories, error) {
 		return otelcol.Factories{}, err
 	}
 
+	connectors, err := connector.MakeFactoryMap(
+		spanmetricsconnector.NewFactory(),
+	)
+
 	return otelcol.Factories{
 		Extensions: extensions,
 		Receivers:  receivers,
+		Connectors: connectors,
 		Processors: processors,
 		Exporters:  exporters,
 	}, nil

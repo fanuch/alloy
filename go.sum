@@ -1782,8 +1782,6 @@ github.com/open-telemetry/opentelemetry-collector-contrib/processor/probabilisti
 github.com/open-telemetry/opentelemetry-collector-contrib/processor/probabilisticsamplerprocessor v0.99.0/go.mod h1:BwSpsu4+Xk3+Le4sqjs6eVZd5xJ+dZ0mZqoX9+sBbUc=
 github.com/open-telemetry/opentelemetry-collector-contrib/processor/resourcedetectionprocessor v0.99.0 h1:Z9wCwf4PV0RLqYAMhM7AXKmdF7lHEq/yElEgTYV24Ow=
 github.com/open-telemetry/opentelemetry-collector-contrib/processor/resourcedetectionprocessor v0.99.0/go.mod h1:ZEfo92OtOsUC8A85caKlUWP3sXULpAfJphxAJYAmVXA=
-github.com/open-telemetry/opentelemetry-collector-contrib/processor/spanmetricsprocessor v0.95.0 h1:zL6QvBvBvP4SqC/fBwH73wYIGzrs6p/pI8oIB8MsjLk=
-github.com/open-telemetry/opentelemetry-collector-contrib/processor/spanmetricsprocessor v0.95.0/go.mod h1:hlgS5QXAk0Yq07Hqho+YzfHnmVnNapbuYiWIOg8bo8k=
 github.com/open-telemetry/opentelemetry-collector-contrib/processor/spanprocessor v0.99.0 h1:z8NLilUq5sbXFi/hvK/FDPou87DLCuHBA110SfdPmfI=
 github.com/open-telemetry/opentelemetry-collector-contrib/processor/spanprocessor v0.99.0/go.mod h1:N5sNn6ASwmCO/LgZWTfVAp23ucI+gtsXFpc3kHI8/KQ=
 github.com/open-telemetry/opentelemetry-collector-contrib/processor/tailsamplingprocessor v0.99.0 h1:1dnYx5KP31mlMqP+BbeOuhKjci/FPiBWpAgcr3ioT4M=
