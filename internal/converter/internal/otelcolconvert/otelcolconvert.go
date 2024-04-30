@@ -19,6 +19,7 @@ import (
 	"go.opentelemetry.io/collector/otelcol"
 	"go.opentelemetry.io/collector/processor"
 	"go.opentelemetry.io/collector/receiver"
+	"go.uber.org/zap"
 	"golang.org/x/exp/maps"
 )
 
@@ -84,7 +85,10 @@ func Convert(in []byte, extraArgs []string) ([]byte, diag.Diagnostics) {
 }
 
 func readOpentelemetryConfig(in []byte) (*otelcol.Config, error) {
-	provider := yamlprovider.New()
+	f := yamlprovider.NewFactory()
+	provider := f.Create(confmap.ProviderSettings{
+		Logger: zap.NewNop(),
+	})
 
 	configProvider, err := otelcol.NewConfigProvider(otelcol.ConfigProviderSettings{
 		ResolverSettings: confmap.ResolverSettings{

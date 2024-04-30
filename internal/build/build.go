@@ -5,7 +5,8 @@ import (
 
 	"github.com/blang/semver/v4"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/common/version"
+	"github.com/prometheus/client_golang/prometheus/collectors/version"
+	promcomversion "github.com/prometheus/common/version"
 )
 
 // Version information passed to Prometheus version package. Package path as
@@ -42,11 +43,11 @@ func normalizeVersion(version string) string {
 }
 
 func injectVersion() {
-	version.Version = Version
-	version.Revision = Revision
-	version.Branch = Branch
-	version.BuildUser = BuildUser
-	version.BuildDate = BuildDate
+	promcomversion.Version = Version
+	promcomversion.Revision = Revision
+	promcomversion.Branch = Branch
+	promcomversion.BuildUser = BuildUser
+	promcomversion.BuildDate = BuildDate
 }
 
 // NewCollector returns a collector that exports metrics about current
@@ -61,5 +62,5 @@ func NewCollector(program string) prometheus.Collector {
 func Print(program string) string {
 	injectVersion()
 
-	return version.Print(program)
+	return promcomversion.Print(program)
 }

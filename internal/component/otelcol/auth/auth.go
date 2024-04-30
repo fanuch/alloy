@@ -168,7 +168,7 @@ func (a *Auth) Update(args component.Arguments) error {
 	// Inform listeners that our handler changed.
 	a.opts.OnStateChange(Exports{
 		Handler: Handler{
-			ID:        otelcomponent.NewID(otelcomponent.Type(a.opts.ID)),
+			ID:        otelcomponent.NewID(otelcomponent.MustNewType(a.opts.ID)),
 			Extension: ext,
 		},
 	})
